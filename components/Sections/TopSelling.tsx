@@ -4,7 +4,7 @@ import Plants from "./TopSellingComponents/Plants";
 
 const TopSelling = () => {
   return (
-    <section className="container py-28">
+    <section id="top-selling" className="container py-28">
       <Title
         tag="h2"
         fancy

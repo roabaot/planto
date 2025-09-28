@@ -91,3 +91,54 @@ export const topSellingPlants = [
     price: "Rs. 1800/-",
   },
 ];
+
+export const reviews = [
+  {
+    id: 1,
+    name: "John Doe",
+    rating: 4.5,
+    comment:
+      "Great quality plants and fast delivery! My home feels so much more alive now.",
+    image: "person3.png",
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    rating: 5,
+    comment:
+      "The customer service was excellent and the plants arrived in perfect condition.",
+    image: "person4.png",
+  },
+  {
+    id: 3,
+    name: "Emily Johnson",
+    rating: 4,
+    comment:
+      "I love the variety of plants available. I found exactly what I was looking for!",
+    image: "person1.png",
+  },
+  {
+    id: 4,
+    name: "Michael Brown",
+    rating: 4.8,
+    comment:
+      "The plants are healthy and beautiful. I've received so many compliments from friends.",
+    image: "person2.png",
+  },
+  {
+    id: 5,
+    name: "Sarah Davis",
+    rating: 5,
+    comment:
+      "I highly recommend this store for anyone looking to add some greenery to their space.",
+    image: "person5.png",
+  },
+  {
+    id: 6,
+    name: "David Wilson",
+    rating: 4.2,
+    comment:
+      "Affordable prices and high-quality plants. I'll definitely be shopping here again.",
+    image: "person6.png",
+  },
+];

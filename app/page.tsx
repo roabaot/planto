@@ -1,3 +1,4 @@
+import CustomerReview from "@/components/Sections/CustomerReview";
 import Hero from "@/components/Sections/Hero";
 import TopSelling from "@/components/Sections/TopSelling";
 
@@ -6,6 +7,7 @@ export default function HomePage() {
     <main>
       <Hero />
       <TopSelling />
+      <CustomerReview />
     </main>
   );
 }
