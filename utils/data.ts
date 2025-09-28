@@ -40,3 +40,54 @@ export const heroData = {
     },
   ],
 };
+
+export const topSellingPlants = [
+  {
+    id: 1,
+    image: "tree.svg",
+    title: "Aloe Vera",
+    description:
+      "Aloe Vera is a succulent plant species known for its medicinal properties and easy care.",
+    price: "Rs. 800/-",
+  },
+  {
+    id: 2,
+    image: "tree2.svg",
+    title: "Peace Lily",
+    description:
+      "Peace Lily is a popular indoor plant known for its elegant white flowers and air-purifying qualities.",
+    price: "Rs. 1200/-",
+  },
+  {
+    id: 3,
+    image: "tree3.svg",
+    title: "Spider Plant",
+    description:
+      "Spider Plant is a resilient houseplant that produces arching leaves and small white flowers, perfect for hanging baskets.",
+    price: "Rs. 600/-",
+  },
+  {
+    id: 4,
+    image: "tree4.svg",
+    title: "Snake Plant",
+    description:
+      "Snake Plant is a hardy indoor plant known for its upright, sword-like leaves and low maintenance requirements.",
+    price: "Rs. 900/-",
+  },
+  {
+    id: 5,
+    image: "tree5.svg",
+    title: "Fiddle Leaf Fig",
+    description:
+      "Fiddle Leaf Fig is a trendy indoor plant with large, violin-shaped leaves that add a bold statement to any room.",
+    price: "Rs. 2500/-",
+  },
+  {
+    id: 6,
+    image: "tree6.svg",
+    title: "Rubber Plant",
+    description:
+      "Rubber Plant is a popular houseplant known for its glossy, dark green leaves and easy care.",
+    price: "Rs. 1800/-",
+  },
+];

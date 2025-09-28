@@ -1,6 +1,13 @@
 "use client";
 
-import { FC, forwardRef, ReactNode, useId } from "react";
+import {
+  forwardRef,
+  ReactNode,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import clsx from "clsx";
 import Image from "next/image";
 
@@ -35,6 +42,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   },
   ref
 ) {
+  const imageRef = useRef<HTMLImageElement | null>(null);
+  const [imgHeight, setImgHeight] = useState<number>(540);
   const id = useId();
   const gradientId = `cardLinear-${id}`;
   const blurMaskId = `blurEdgeMask-${id}`;
@@ -57,6 +66,23 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   // If a perfect geometric inside stroke is required without scaling artifacts, implement
   // a true path offset for the blur layer or a mask ring.
 
+  useLayoutEffect(() => {
+    const measure = () => {
+      if (imageRef.current) {
+        const h = imageRef.current.offsetHeight;
+        console.log("Measured height:", h);
+
+        const imageSpace = h * 0.35; // adjust based on design
+        setImgHeight(h - imageSpace);
+      }
+    };
+    measure();
+
+    // Optional: update on resize if layout can change
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
   return (
     <div
       ref={ref}
@@ -71,6 +97,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
         >
           <div className="relative h-full w-full">
             <Image
+              ref={imageRef}
               src={imageUrl}
               alt="Card Image"
               fill
@@ -82,14 +109,15 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
 
       {/* Clipped card container with intrinsic (content) height */}
       <div
-        className={clsx(
-          "relative w-full h-full overflow-hidden",
-          allowImageOverflow ? "pt-[232px]" : ""
-        )}
-        style={{ clipPath: clipPathString, WebkitClipPath: clipPathString }}
+        className={clsx("relative w-full h-full overflow-hidden")}
+        style={{
+          clipPath: clipPathString,
+          WebkitClipPath: clipPathString,
+          paddingTop: allowImageOverflow ? imgHeight : 0,
+        }}
       >
         {onClick && (
-          <div className="absolute inset-0 w-[calc(100%-26px)] h-[calc(100%-21px)] rounded-b-[44px] rounded-t-[44px] mx-auto mt-1.5 cursor-pointer z-10 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 w-[94%] h-[95%] rounded-b-[14%] rounded-t-[44px] mx-auto mt-1.5 cursor-pointer z-10 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         )}
         {/* Blur layer masked to exclude a thin ring under the stroke */}
         <svg

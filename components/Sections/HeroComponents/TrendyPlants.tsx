@@ -8,7 +8,7 @@ const TrendyPlants = () => {
       <Title
         fancy
         wrapperClassName="text-center"
-        contentClassName="text-center text-5xl text-white font-semibold"
+        contentClassName="text-center text-3xl md:text-4xl lg:text-5xl text-white font-semibold"
       >
         Our Trendy plants
       </Title>
