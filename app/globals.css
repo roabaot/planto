@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+:root {
+  --background: 255 255 255;
+  --foreground: 17 24 39;
+}
+
+body {
+  font-feature-settings: "rlig" 1, "calt" 1;
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
+}
+
+.font-inter {
+  font-family: "Inter", sans-serif;
+}
+
+.font-cursive {
+  font-family: "Pacifico", cursive;
+}
+
+.font-fantasy {
+  font-family: "Fantasy", fantasy;
+}
+
+/* Fancy gradient corner border (only top-right & bottom-left) */
+.fancy-title {
+  --b: 0.18rem; /* bar thickness */
+  --c: 1.8rem; /* corner footprint (square) */
+  --grad: linear-gradient(45deg, orange, deeppink, purple);
+  position: relative;
+  display: inline-block; /* shrink-wrap around text */
+  padding: 0.5rem 0.9rem; /* inner spacing */
+  font-weight: 600;
+  line-height: 1.2;
+}
+/* Shared corner piece styles */
+.fancy-title::before,
+.fancy-title::after {
+  content: "";
+  position: absolute;
+  width: var(--c);
+  height: var(--c);
+  pointer-events: none;
+  /* Two gradient strips: one horizontal, one vertical */
+  background: var(--grad) top right / 100% var(--b) no-repeat,
+    var(--grad) top right / var(--b) 100% no-repeat;
+}
+/* Top-right corner */
+.fancy-title::before {
+  top: 0;
+  right: 0;
+  border-top-right-radius: var(--c);
+  overflow: hidden;
+}
+/* Bottom-left corner overrides alignment of the two strips */
+.fancy-title::after {
+  bottom: 0;
+  left: 0;
+  background: var(--grad) bottom left / 100% var(--b) no-repeat,
+    var(--grad) bottom left / var(--b) 100% no-repeat;
+  border-bottom-left-radius: var(--c);
+  overflow: hidden;
+}
+
+.corner {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  pointer-events: none; /* doesn’t block mouse */
+}
+
+.corner.top-right {
+  top: 12px;
+  right: 8px;
+  transform: translate(50%, -50%);
+}
+
+.corner.bottom-left {
+  bottom: 12px;
+  left: 8px;
+  transform: translate(-50%, 50%);
+}
+
+/* Gradient stroke helper: preserves inner background while showing a 1px diagonal gradient border */
+.gradient-stroke {
+  position: relative;
+  -webkit-mask: radial-gradient(
+    140% 94% at 50% -33%,
+    transparent 40%,
+    #000 41%
+  );
+  mask: radial-gradient(140% 94% at 50% -33%, transparent 40%, #000 41%);
+}
+.gradient-stroke::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px; /* stroke thickness */
+  border-radius: inherit;
+  background: linear-gradient(145deg, #ffffff 0%, #000000 52%, #ffffff 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.container {
+  max-width: calc(100% - 88px);
+  margin: 0 auto;
+}
+
+.gradient-border-mask {
+  display: flow-root;
+  position: relative;
+  border-radius: 45px;
+  padding: 1.3rem;
+}
+
+.gradient-border-mask::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 45px;
+  border: 2px solid transparent;
+  /* Fixed invalid gradient syntax: color should precede position (was 0% #ffffff73 etc.) */
+  background: linear-gradient(136deg, #ffffff73 0%, #fff0 45%, #ffffff73 100%)
+    border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+}
+
+.dots {
+  display: flex;
+  padding: 10px 0;
+  justify-content: center;
+}
+
+.dot {
+  border: none;
+  width: 10px;
+  height: 10px;
+  background: #c5c5c5;
+  border-radius: 50%;
+  margin: 0 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.dot:focus {
+  outline: none;
+}
+
+.dot.active {
+  background: #000;
+}
+
+.keen-slider && .keen-slider__slide {
+  overflow: unset !important;
+  overflow-x: clip !important;
+}
