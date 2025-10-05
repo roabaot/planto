@@ -14,18 +14,18 @@ const Plants = () => {
           innerStroke
           allowImageOverflow
           onClick={() => {
-            console.log(`Clicked on ${plant.title}`);
+            alert(`Clicked on ${plant.title}`);
           }}
         >
-          <div className="md:px-12 px-8 pb-9">
-            <h3 className="md:text-3xl text-2xl font-semibold text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
+          <div className="lg:px-12 px-8 pb-9">
+            <h3 className="lg:text-3xl text-2xl font-semibold text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
               {plant.title}
             </h3>
-            <p className="md:text-xl text-lg line-clamp-2 text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
+            <p className="lg:text-xl text-lg line-clamp-2 text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
               {plant.description}
             </p>
             <div className="flex items-center justify-between mt-4">
-              <span className="md:text-3xl text-2xl font-bold text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
+              <span className="lg:text-3xl text-2xl font-bold text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
                 {plant.price}
               </span>
               <Button iconOnly className="p-1.5">

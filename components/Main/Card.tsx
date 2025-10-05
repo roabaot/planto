@@ -24,6 +24,8 @@ export interface CardProps {
   blurShrinkFactor?: number;
   /** Width (in viewBox units 0-100) of the clear ring under the stroke where blur is removed. */
   blurEdgeClear?: number;
+  /** Recalculate padding on window resize (default true). */
+  recalcOnResize?: boolean;
 }
 
 /**
@@ -39,11 +41,14 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
     allowImageOverflow = false,
     innerStroke = true,
     blurEdgeClear = 0,
+    recalcOnResize = true,
   },
   ref
 ) {
   const imageRef = useRef<HTMLImageElement | null>(null);
-  const [imgHeight, setImgHeight] = useState<number>(540);
+  // Original logic: space below overflow image = imageHeight - imageHeight*0.35 (i.e. keep 65%).
+  // We store that as imgHeight and use it as paddingTop when allowImageOverflow.
+  const [imgHeight, setImgHeight] = useState<number>(0);
   const id = useId();
   const gradientId = `cardLinear-${id}`;
   const blurMaskId = `blurEdgeMask-${id}`;
@@ -66,22 +71,42 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   // If a perfect geometric inside stroke is required without scaling artifacts, implement
   // a true path offset for the blur layer or a mask ring.
 
+  // Measure on mount (if already loaded) and on image load.
   useLayoutEffect(() => {
+    if (!allowImageOverflow) return;
     const measure = () => {
-      if (imageRef.current) {
-        const h = imageRef.current.offsetHeight;
-        console.log("Measured height:", h);
-
-        const imageSpace = h * 0.35; // adjust based on design
+      if (!imageRef.current) return;
+      const h = imageRef.current.offsetHeight; // container fixed height
+      if (h) {
+        const imageSpace = h * 0.35; // overlap portion (same as original)
         setImgHeight(h - imageSpace);
       }
     };
-    measure();
+    if (imageRef.current && imageRef.current.complete) measure();
+  }, [allowImageOverflow]);
 
-    // Optional: update on resize if layout can change
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, []);
+  // Optional: recalc on resize using original formula.
+  useLayoutEffect(() => {
+    if (!allowImageOverflow || !recalcOnResize) return;
+    let frame = 0;
+    const measure = () => {
+      if (!imageRef.current) return;
+      const h = imageRef.current.offsetHeight;
+      if (h) {
+        const imageSpace = h * 0.35;
+        setImgHeight(h - imageSpace);
+      }
+    };
+    const onResize = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(measure);
+    };
+    window.addEventListener("resize", onResize);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [allowImageOverflow, recalcOnResize]);
 
   return (
     <div
@@ -101,6 +126,14 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
               src={imageUrl}
               alt="Card Image"
               fill
+              onLoadingComplete={() => {
+                if (!imageRef.current) return;
+                const h = imageRef.current.offsetHeight;
+                if (h) {
+                  const imageSpace = h * 0.4;
+                  setImgHeight(h - imageSpace);
+                }
+              }}
               className="object-cover transition-transform duration-500 group-hover:scale-105 !h-fit"
             />
           </div>
