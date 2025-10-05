@@ -17,15 +17,15 @@ const Plants = () => {
             console.log(`Clicked on ${plant.title}`);
           }}
         >
-          <div className="px-12 pb-9">
-            <h3 className="text-3xl font-semibold text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
+          <div className="md:px-12 px-8 pb-9">
+            <h3 className="md:text-3xl text-2xl font-semibold text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
               {plant.title}
             </h3>
-            <p className="text-xl line-clamp-2 text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
+            <p className="md:text-xl text-lg line-clamp-2 text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
               {plant.description}
             </p>
             <div className="flex items-center justify-between mt-4">
-              <span className="text-3xl font-bold text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
+              <span className="md:text-3xl text-2xl font-bold text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
                 {plant.price}
               </span>
               <Button iconOnly className="p-1.5">

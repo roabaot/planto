@@ -11,11 +11,11 @@ const Hero = () => {
       className="min-h-screen w-full bg-[url('/hero-background.svg')] bg-cover bg-no-repeat"
     >
       <div className="container pt-[200px]">
-        <div className="grid md:grid-cols-3 grid-cols-1">
+        <div className="grid md:grid-cols-3 grid-cols-1 gap-y-9">
           <div className="col-span-2 text-start">
             <div>
               <div>
-                <h1 className="text-8xl font-bold text-white">
+                <h1 className="lg:text-8xl md:text-6xl text-6xl font-bold text-white">
                   Breath Natural
                 </h1>
                 <p className="text-lg text-white/75">
@@ -36,8 +36,8 @@ const Hero = () => {
               </div>
             </div>
 
-            <div className="mt-72">
-              <InfoCard className="max-w-[400px]">
+            <div className="md:block hidden mt-72">
+              <InfoCard className="max-w-[400px] rounded-[45px]">
                 <div className="p-8 space-y-4">
                   <div className="flex items-center gap-4">
                     <Image
@@ -66,7 +66,7 @@ const Hero = () => {
               </InfoCard>
             </div>
           </div>
-          <div className="h-fit">
+          <div className="h-fit md:mt-0 mt-12">
             <HeroSwiper />
           </div>
         </div>

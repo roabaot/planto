@@ -154,7 +154,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
             </filter>
           </defs>
           {/* Background fill with mask; use backdrop-blur via parent layering by stacking an HTML overlay behind if needed. Here we approximate with semi transparent fill + SVG blur fallback. */}
-          <g mask={`url(#${blurMaskId})`}>
+          <g mask={`url(#${blurMaskId})`} className="backdrop-blur-3xl">
             <rect
               x="0"
               y="0"

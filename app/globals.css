@@ -123,7 +123,8 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 45px;
+  /* Inherit so parent rounded-* Tailwind classes control both layers */
+  border-radius: inherit;
   border: 2px solid transparent;
   /* Fixed invalid gradient syntax: color should precede position (was 0% #ffffff73 etc.) */
   background: linear-gradient(136deg, #ffffff73 0%, #fff0 45%, #ffffff73 100%)

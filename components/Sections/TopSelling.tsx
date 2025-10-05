@@ -14,7 +14,7 @@ const TopSelling = () => {
         Our Top Selling Plants
       </Title>
 
-      <div className="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-4 gap-y-12">
+      <div className="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-4 md:gap-y-12 gap-y-16">
         <Plants />
       </div>
     </section>

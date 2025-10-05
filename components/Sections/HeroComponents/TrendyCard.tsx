@@ -18,14 +18,15 @@ type TrendyCardProps = {
 
 const TrendyCard = ({ plant }: TrendyCardProps) => {
   const trendyCardRef = useRef<HTMLDivElement>(null);
-  const [imgHeight, setImgHeight] = useState<number>(540); // fallback
+  const [imgHeight, setImgHeight] = useState<number | "auto">(540); // fallback
 
   // useLayoutEffect ensures measurement before paint; useEffect is also okay if flicker is acceptable.
   useLayoutEffect(() => {
     const measure = () => {
-      if (trendyCardRef.current) {
+      if (window.innerWidth < 768) {
+        setImgHeight("auto");
+      } else if (trendyCardRef.current) {
         const h = trendyCardRef.current.offsetHeight;
-        console.log("Measured height:", h);
 
         setImgHeight(h + 124);
       }
@@ -40,7 +41,7 @@ const TrendyCard = ({ plant }: TrendyCardProps) => {
     <div ref={trendyCardRef}>
       <InfoCard>
         <div
-          className={`flex gap-4 ${
+          className={`md:flex gap-4 rounded-[45px] ${
             plant.reverse ? "flex-row-reverse" : "flex-row"
           }`}
         >
@@ -49,26 +50,32 @@ const TrendyCard = ({ plant }: TrendyCardProps) => {
               src={`/trees/trimmed/${plant.image}`}
               alt="tree"
               width={540}
-              height={imgHeight}
-              className={`absolute -top-[124px] ${
+              height={typeof imgHeight === "number" ? imgHeight : 540}
+              className={`md:absolute -top-[124px] md:mt-0 -mt-24 ${
                 plant.reverse ? "right-0" : "left-0"
               }`}
-              style={{ height: `${imgHeight}px` }}
+              style={{
+                height: imgHeight === "auto" ? "auto" : `${imgHeight}px`,
+              }}
             />
           </div>
-          <div className="space-y-6 px-8 py-12 flex-1">
-            <h3 className="text-white text-4xl font-semibold">{plant.title}</h3>
-            <p className="text-white text-lg font-semibold">
+          <div className="space-y-6 px-8 py-12 md:pt-12 pt-0 flex-1">
+            <h3 className="text-white lg:text-4xl md:text-3xl text-2xl font-semibold">
+              {plant.title}
+            </h3>
+            <p className="text-white lg:text-lg md:text-base text-sm font-semibold">
               {plant.description}
             </p>
-            <p className="text-white text-4xl font-semibold">{plant.price}</p>
+            <p className="text-white lg:text-4xl md:text-3xl text-2xl font-semibold">
+              {plant.price}
+            </p>
 
             <div className="flex items-center gap-4">
-              <Button className="py-3 px-6 text-2xl font-medium !text-white">
+              <Button className="py-3 px-6 lg:text-2xl md:text-xl text-lg font-medium !text-white">
                 Explore
               </Button>
               <Button iconOnly className="p-3 !text-white">
-                <Bag className="w-8 h-8" />
+                <Bag className="lg:w-8 lg:h-8 w-7 h-7" />
               </Button>
             </div>
           </div>

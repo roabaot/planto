@@ -64,7 +64,7 @@ const HeroSwiper = () => {
 
   return (
     <div
-      className="w-[381px] ms-auto"
+      className="max-w-[381px] ms-auto"
       ref={wrapperRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -77,6 +77,7 @@ const HeroSwiper = () => {
           imageUrl={heroData.swipers[currentSlide].image}
           allowImageOverflow
           innerStroke
+          blurShrinkFactor={8}
         >
           <div
             ref={sliderRef}
