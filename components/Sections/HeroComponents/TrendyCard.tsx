@@ -3,6 +3,9 @@ import { Button, InfoCard } from "@/components/Main";
 import Image from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
 import Bag from "@/components/icons/Bag.svg?component";
+// Using custom IntersectionObserver-based reveal
+import { useReveal } from "@/hooks/useReveal";
+import { CSSProperties } from "react";
 
 type Plant = {
   image: string;
@@ -14,11 +17,18 @@ type Plant = {
 
 type TrendyCardProps = {
   plant: Plant;
+  index?: number; // for staggered delay
 };
 
-const TrendyCard = ({ plant }: TrendyCardProps) => {
+// (animation removed)
+
+const TrendyCard = ({ plant, index = 0 }: TrendyCardProps) => {
   const trendyCardRef = useRef<HTMLDivElement>(null);
   const [imgHeight, setImgHeight] = useState<number | "auto">(540); // fallback
+  const { ref: revealRef, visible } = useReveal<HTMLDivElement>({
+    threshold: 0.45,
+    rootMargin: "0px 0px -15% 0px",
+  });
 
   // useLayoutEffect ensures measurement before paint; useEffect is also okay if flicker is acceptable.
   useLayoutEffect(() => {
@@ -41,9 +51,13 @@ const TrendyCard = ({ plant }: TrendyCardProps) => {
     <div ref={trendyCardRef}>
       <InfoCard>
         <div
-          className={`md:flex gap-4 rounded-[45px] ${
+          ref={revealRef}
+          className={`reveal ${
+            visible ? "reveal-visible" : ""
+          } md:flex gap-4 rounded-[45px] ${
             plant.reverse ? "flex-row-reverse" : "flex-row"
           }`}
+          style={{ ["--reveal-delay"]: `${index * 90}ms` } as CSSProperties}
         >
           <div className="relative flex-1">
             <Image
@@ -59,7 +73,7 @@ const TrendyCard = ({ plant }: TrendyCardProps) => {
               }}
             />
           </div>
-          <div className="space-y-6 px-8 py-12 md:pt-12 pt-0 flex-1">
+          <div className="space-y-6 px-8 md:py-12 pt-0 pb-6 flex-1">
             <h3 className="text-white lg:text-4xl md:text-3xl text-2xl font-semibold">
               {plant.title}
             </h3>

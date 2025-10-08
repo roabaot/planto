@@ -10,7 +10,7 @@ const Hero = () => {
       id="hero"
       className="min-h-screen w-full bg-[url('/hero-background.svg')] bg-cover bg-no-repeat"
     >
-      <div className="container pt-[200px]">
+      <div className="container pt-[240px]">
         <div className="grid md:grid-cols-3 grid-cols-1 gap-y-9">
           <div className="col-span-2 text-start">
             <div>

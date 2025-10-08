@@ -1,10 +1,28 @@
+"use client";
+import { motion } from "framer-motion";
 import Title from "@/components/Main/Title";
 import { heroData } from "@/utils/data";
 import TrendyCard from "./TrendyCard";
+import { sectionVariants } from "@/utils/animation";
 
 const TrendyPlants = () => {
+  // Each card will animate individually when 50% of it is visible in viewport
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    },
+  };
   return (
-    <div className="py-28 space-y-20">
+    <motion.div
+      variants={sectionVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      className="py-28 space-y-20"
+    >
       <Title
         fancy
         wrapperClassName="text-center"
@@ -15,10 +33,18 @@ const TrendyPlants = () => {
 
       <div className="space-y-16">
         {heroData.trendyPlants.map((plant) => (
-          <TrendyCard key={plant.id} plant={plant} />
+          <motion.div
+            key={plant.id}
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+          >
+            <TrendyCard plant={plant} />
+          </motion.div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -3,37 +3,52 @@ import React from "react";
 import { Button, Card } from "@/components/Main";
 import { topSellingPlants } from "@/utils/data";
 import Bag from "@/components/icons/Bag.svg?component";
+import { motion } from "framer-motion";
+import { cardVariants } from "@/utils/animation";
 
 const Plants = () => {
   return (
     <>
-      {topSellingPlants.map((plant) => (
-        <Card
+      {topSellingPlants.map((plant, idx) => (
+        <motion.div
           key={plant.id}
-          imageUrl={`/trees/${plant.image}`}
-          innerStroke
-          allowImageOverflow
-          onClick={() => {
-            alert(`Clicked on ${plant.title}`);
+          variants={cardVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{
+            duration: 0.5,
+            ease: [0.22, 1, 0.36, 1],
+            delay: 0.15 + idx * 0.18,
           }}
+          className="w-full"
         >
-          <div className="lg:px-12 px-8 pb-9">
-            <h3 className="lg:text-3xl text-2xl font-semibold text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
-              {plant.title}
-            </h3>
-            <p className="lg:text-xl text-lg line-clamp-2 text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
-              {plant.description}
-            </p>
-            <div className="flex items-center justify-between mt-4">
-              <span className="lg:text-3xl text-2xl font-bold text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
-                {plant.price}
-              </span>
-              <Button iconOnly className="p-1.5">
-                <Bag className="w-6 h-6" />
-              </Button>
+          <Card
+            imageUrl={`/trees/${plant.image}`}
+            innerStroke
+            allowImageOverflow
+            onClick={() => {
+              alert(`Clicked on ${plant.title}`);
+            }}
+          >
+            <div className="lg:px-12 px-8 pb-9">
+              <h3 className="lg:text-3xl text-2xl font-semibold text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
+                {plant.title}
+              </h3>
+              <p className="lg:text-xl text-lg line-clamp-2 text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
+                {plant.description}
+              </p>
+              <div className="flex items-center justify-between mt-4">
+                <span className="lg:text-3xl text-2xl font-bold text-white/75 group-hover:text-white transition-colors duration-300 ease-in-out">
+                  {plant.price}
+                </span>
+                <Button iconOnly className="p-1.5">
+                  <Bag className="w-6 h-6" />
+                </Button>
+              </div>
             </div>
-          </div>
-        </Card>
+          </Card>
+        </motion.div>
       ))}
     </>
   );

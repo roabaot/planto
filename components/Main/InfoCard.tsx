@@ -5,6 +5,7 @@ export interface InfoCardProps {
   className?: string;
 }
 
+// Reverted to original straightforward glass style
 const InfoCard = ({ children, className }: InfoCardProps) => {
   return (
     <div

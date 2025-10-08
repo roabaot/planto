@@ -5,6 +5,12 @@
   --foreground: 17 24 39;
 }
 
+:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
 body {
   font-feature-settings: "rlig" 1, "calt" 1;
   background-color: rgb(var(--background));
@@ -163,4 +169,432 @@ body {
 .keen-slider && .keen-slider__slide {
   overflow: unset !important;
   overflow-x: clip !important;
+}
+
+/* =============================
+   App Loading Overlay
+   ============================= */
+.app-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 30% 30%, #24311f, #141b13 70%);
+  pointer-events: none; /* prevent accidental interaction while fading */
+}
+
+body.app-loaded .app-loading-overlay {
+  display: none; /* removed after fade-out exit animation */
+}
+
+/* Main content hidden until app-ready (set by LoadingScreen) */
+.app-content {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s ease 0s, transform 0.6s ease 0s;
+  will-change: opacity, transform;
+}
+body.app-ready .app-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+}
+
+.loader-text {
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+/* Spinner inspired by growing bars around a circle */
+.spinner {
+  position: relative;
+  width: 72px;
+  height: 72px;
+}
+.spinner-bar {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 22px;
+  margin: -11px -5px; /* center each bar */
+  background: linear-gradient(180deg, #8ddc6e, #3f8d2d);
+  border-radius: 5px;
+  transform-origin: 50% 120%;
+  animation: spinnerPulse 1.2s linear infinite;
+  filter: drop-shadow(0 0 4px #4caf5077);
+}
+/* Position each bar (12 bars = 30deg apart) with progressive delay */
+.spinner-bar:nth-child(1) {
+  transform: rotate(0deg);
+  animation-delay: -1.1s;
+}
+.spinner-bar:nth-child(2) {
+  transform: rotate(30deg);
+  animation-delay: -1s;
+}
+.spinner-bar:nth-child(3) {
+  transform: rotate(60deg);
+  animation-delay: -0.9s;
+}
+.spinner-bar:nth-child(4) {
+  transform: rotate(90deg);
+  animation-delay: -0.8s;
+}
+.spinner-bar:nth-child(5) {
+  transform: rotate(120deg);
+  animation-delay: -0.7s;
+}
+.spinner-bar:nth-child(6) {
+  transform: rotate(150deg);
+  animation-delay: -0.6s;
+}
+.spinner-bar:nth-child(7) {
+  transform: rotate(180deg);
+  animation-delay: -0.5s;
+}
+.spinner-bar:nth-child(8) {
+  transform: rotate(210deg);
+  animation-delay: -0.4s;
+}
+.spinner-bar:nth-child(9) {
+  transform: rotate(240deg);
+  animation-delay: -0.3s;
+}
+.spinner-bar:nth-child(10) {
+  transform: rotate(270deg);
+  animation-delay: -0.2s;
+}
+.spinner-bar:nth-child(11) {
+  transform: rotate(300deg);
+  animation-delay: -0.1s;
+}
+.spinner-bar:nth-child(12) {
+  transform: rotate(330deg);
+  animation-delay: 0s;
+}
+
+@keyframes spinnerPulse {
+  0%,
+  20% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(0.4);
+  }
+}
+
+/* =============================
+   Plant Spinner (replaces bar spinner)
+   ============================= */
+.plant-spinner {
+  width: 110px;
+  height: 120px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.plant {
+  position: relative;
+  width: 70px;
+  height: 110px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.plant-stem {
+  position: absolute;
+  inset-inline: 50%;
+  bottom: 20px;
+  width: 8px;
+  height: 0;
+  background: linear-gradient(180deg, #4caf50, #2f6e34);
+  border-radius: 4px;
+  animation: stemGrow 1.4s ease-out forwards;
+  box-shadow: 0 0 4px #4caf5080;
+}
+.plant-leaf {
+  position: absolute;
+  width: 46px; /* broader than tall to allow a tapered tip via clip-path */
+  height: 60px;
+  /* Multi-layer gradient: base green + subtle highlight + edge darkening */
+  background: linear-gradient(145deg, #60d66a 0%, #2f6e34 65%),
+    radial-gradient(circle at 30% 25%, #83f08e 0%, #60d66a 55%, #33813c 70%);
+  background-blend-mode: multiply;
+  clip-path: polygon(
+    50% 0%,
+    88% 18%,
+    100% 45%,
+    84% 80%,
+    50% 100%,
+    16% 80%,
+    0% 45%,
+    12% 18%
+  );
+  opacity: 0;
+  transform-origin: bottom center;
+  filter: drop-shadow(0 0 6px #53d66b55) drop-shadow(0 2px 4px #00000040);
+}
+/* Leaf vein */
+.plant-leaf::after {
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  width: 2px;
+  height: 70%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #ffffff60 0%, #ffffff10 100%);
+  border-radius: 2px;
+  pointer-events: none;
+  filter: blur(0.3px);
+}
+.leaf-left {
+  bottom: 52px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-38deg) scale(0.2);
+  animation: leafGrow 0.9s 0.35s ease-out forwards;
+}
+.leaf-right {
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%) rotate(40deg) scale(0.2);
+  animation: leafGrow 0.9s 0.45s ease-out forwards;
+}
+.leaf-mid {
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%) rotate(0deg) scale(0.25);
+  animation: leafGrow 0.9s 0.55s ease-out forwards;
+}
+
+/* Stem smaller leaves */
+.stem-leaf {
+  position: absolute;
+  width: 28px;
+  height: 36px;
+  background: linear-gradient(140deg, #6fe27a 0%, #2f6e34 70%);
+  clip-path: polygon(
+    50% 0%,
+    86% 20%,
+    100% 48%,
+    78% 82%,
+    50% 100%,
+    22% 82%,
+    0% 48%,
+    14% 20%
+  );
+  opacity: 0;
+  transform-origin: bottom center;
+  filter: drop-shadow(0 0 4px #53d66b55) drop-shadow(0 1px 2px #00000050);
+  animation: stemLeafAppear 0.7s ease-out forwards;
+}
+.stem-leaf::after {
+  content: "";
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  width: 2px;
+  height: 68%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #ffffff50, #ffffff08);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.stem-leaf-1 {
+  bottom: 46px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-22deg) scale(0.1);
+  animation-delay: 0.25s;
+}
+.stem-leaf-2 {
+  bottom: 56px;
+  left: 50%;
+  transform: translateX(-50%) rotate(18deg) scale(0.1);
+  animation-delay: 0.32s;
+}
+.stem-leaf-3 {
+  bottom: 64px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-10deg) scale(0.1);
+  animation-delay: 0.38s;
+}
+
+.plant-pot {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 64px;
+  height: 40px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #5a4528, #2d1e0d 70%);
+  border-radius: 6px 6px 10px 10px / 10px 10px 18px 18px;
+  box-shadow: inset 0 4px 6px #ffffff10, 0 4px 10px #00000070;
+  overflow: hidden;
+  animation: potPop 0.6s ease-out;
+}
+.plant-pot::before {
+  /* pot lip */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: linear-gradient(180deg, #866540, #4a3219);
+}
+.pot-inner {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 20%, #694a27, #322214 75%);
+  opacity: 0.7;
+  mix-blend-mode: overlay;
+}
+.plant-glow {
+  position: absolute;
+  bottom: 34px;
+  left: 50%;
+  width: 90px;
+  height: 90px;
+  transform: translate(-50%, 20%);
+  background: radial-gradient(circle at 50% 60%, #5ad06f40, transparent 70%);
+  opacity: 0;
+  animation: glowRise 1.8s 0.6s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes stemGrow {
+  0% {
+    height: 0;
+  }
+  60% {
+    height: 68px;
+  }
+  100% {
+    height: 68px;
+  }
+}
+@keyframes potPop {
+  0% {
+    transform: translate(-50%, 40%) scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, 0) scale(1);
+    opacity: 1;
+  }
+}
+@keyframes leafGrow {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) rotate(var(--leaf-rot, 0deg)) scale(0.05);
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) rotate(var(--leaf-rot, 0deg)) scale(1);
+  }
+}
+@keyframes glowRise {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 40%) scale(0.6);
+  }
+  70% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.55;
+    transform: translate(-50%, 20%) scale(1);
+  }
+}
+@keyframes stemLeafAppear {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) rotate(var(--stem-leaf-rot, 0deg)) scale(0.05);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) rotate(var(--stem-leaf-rot, 0deg)) scale(1);
+  }
+}
+
+/* Gentle sway after growth */
+.plant-stem,
+.leaf-left,
+.leaf-right,
+.leaf-mid {
+  animation-name: stemGrow, sway; /* note: leaves override with their own growth animations first */
+}
+@keyframes sway {
+  0%,
+  100% {
+    transform: translateX(-50%) rotate(0deg);
+  }
+  50% {
+    transform: translateX(-50%) rotate(1.8deg);
+  }
+}
+
+/* Reduced motion respect */
+@media (prefers-reduced-motion: reduce) {
+  .plant-stem,
+  .plant-leaf,
+  .plant-pot,
+  .plant-glow {
+    animation: none !important;
+    height: 68px;
+    opacity: 1;
+  }
+}
+
+/* =============================
+   Generic Reveal Utilities
+   ============================= */
+.reveal {
+  --reveal-delay: 0ms;
+  opacity: 0;
+  transform: translateY(42px) scale(0.995);
+  filter: blur(6px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay),
+    filter 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay);
+  will-change: opacity, transform, filter;
+}
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
 }
